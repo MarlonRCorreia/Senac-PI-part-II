@@ -1,4 +1,4 @@
-# 💻 Projeto Integrador III: Desenvolvimento de Sistemas Orientado a Objetos (2ª Entrega)
+#  Projeto Integrador III: Desenvolvimento de Sistemas Orientado a Objetos (2ª Entrega)
 
 ## 👤 Integrantes do Grupo 49
 * [cite_start]Anna Caroline Moreira Picanço [cite: 569]
@@ -67,5 +67,3 @@ Os scripts DDL e DML necessários para o armazenamento dos dados modelados estã
 * Comandos `INSERT` de exemplo para popular todas as tabelas.
 * Exemplos de consultas (`SELECT`) podem ser adicionados para demonstração.
 
-```markdown
-**COLOQUE AQUI OS SEUS SCRIPTS SQL DDL E DML para facilitar a visualização.**
