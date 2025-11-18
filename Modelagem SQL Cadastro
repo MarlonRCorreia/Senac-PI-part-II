@@ -1,0 +1,86 @@
+CREATE DATABASE universidade;
+
+USE universidade;
+
+CREATE TABLE Usuarios(
+	Senha VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    CONSTRAINT pk_Usuarios PRIMARY KEY (email)
+);
+  CREATE TABLE Pessoafisica (
+	cpf CHAR(11) NOT NULL,
+	nome VARCHAR(50) NOT NULL, 
+    data_nasc DATE NOT NULL,
+    telefone VARCHAR(11),
+    email VARCHAR(50) NOT NULL,
+    docente BOOLEAN DEFAULT FALSE,
+    CONSTRAINT pk_Pessoafisica PRIMARY KEY (cpf),
+    CONSTRAINT fk_Pessoafisica FOREIGN KEY (email) REFERENCES Usuarios(email)
+); 
+CREATE TABLE Alunos ( 
+	matricula INTEGER AUTO_INCREMENT NOT NULL,
+	cpf CHAR(11),
+    nome VARCHAR(50) NOT NULL, 
+    data_nasc DATE NOT NULL,
+    telefone VARCHAR(11),
+    email VARCHAR(50) NOT NULL,
+	disciplina VARCHAR(50),
+    CONSTRAINt pk_Alunos PRIMARY KEY (matricula),
+    CONSTRAINT fk_Alunos FOREIGN KEY (cpf) REFERENCES Pessoafisica(cpf)
+   );
+   /*altera o auto incremento para partir de 1000*/
+   ALTER TABLE Alunos AUTO_INCREMENT = 1000;
+   
+  CREATE TABLE Professores ( 
+	RF INTEGER AUTO_INCREMENT NOT NULL,
+	cpf CHAR(11) NOT NULL,
+	nome VARCHAR(50) NOT NULL, 
+    data_nasc DATE NOT NULL,
+    telefone VARCHAR(11),
+    email VARCHAR(50) NOT NULL,
+	disciplina VARCHAR(50),
+    CONSTRAINT pk_Professores PRIMARY KEY (RF)
+    );
+    CREATE TABLE Pessoajuridica (
+	cpf_cnpj CHAR(12) NOT NULL, 
+	razaosocial VARCHAR(50) NOT NULL, 
+    cnae VARCHAR(100),
+    CONSTRAINT pk_Pessoajuridica PRIMARY KEY (cpf_cnpj)
+    ); 
+ CREATE TABLE Fornecedor (
+	IDfornecedor INTEGER AUTO_INCREMENT NOT NULL,
+	cpf_cnpj CHAR(12),
+    razaosocial VARCHAR(50) NOT NULL,
+    cnae VARCHAR(100),
+    CONSTRAINT pk_Fornecedor PRIMARY KEY (IDfornecedor),
+    CONSTRAINT fk_Fornecedor FOREIGN KEY (cpf_cnpj) REFERENCES Pessoajuridica(cpf_cnpj)
+   );
+/*inserido senha e e-mail na tabela Usuarios*/
+INSERT INTO Usuarios (Senha, email) 
+VALUES ('coala012','marlon@email.com'),
+		('koala012','carlos@email.com'),
+        ('quoala012','fabiana@email.com'),
+        ('kanguru013','esther@email.com'),
+        ('kanguru014','cleide@email.com');
+/*simulando inserção de registros na tabela pessoa física. 
+Campo docente será preenchido com "verdadeiro" ou "falso", sendo que o campo docente será "verdadeiro" caso o link de cadastro 
+seja orindo de e-mail da instituição de ensino, que direciona o professor ao portal para criação do acesso*/
+INSERT INTO Pessoafisica (cpf, nome, data_nasc, telefone, email, docente) 
+VALUES ('12345678910','Marlon Santana', '1986-06-25','11952840011','marlon@email.com',FALSE),
+		('24255367890','Carlos Oliveira', '1989-10-05','11902440011','carlos@email.com',FALSE),
+        ('12345678911','Fabiana Correia', '1996-09-12','11952840011','fabiana@email.com',FALSE),
+		('72345678910','Esther Oliveira', '1989-10-05','11902440011','esther@email.com',FALSE),
+		('23456789101','Cleide Silveira','1966-05-11','11909091010','cleide@email.com',TRUE);
+
+/*Alunos são inseridos na tabela alunos*/      
+INSERT INTO Alunos (cpf, nome, data_nasc, telefone, email) SELECT cpf, nome, data_nasc, telefone, email FROM Pessoafisica WHERE docente = 0;
+/*professor é inserido na tabela professores*/
+INSERT INTO Professores (cpf, nome, data_nasc, telefone, email) SELECT cpf, nome, data_nasc, telefone, email FROM Pessoafisica WHERE docente = 1;
+
+/*pessoa juridica é inserida na tabela Pessoajuridica*/
+INSERT INTO Pessoajuridica (cpf_cnpj, razaosocial, cnae) 
+VALUES ('123456000175','Escreve certo por linhas tortas canetas LTDA', 'comercio de insumos para escritório'),
+		('242553000140','nadadexeror impressões', 'impressoras'),
+        ('567891000356','Bebeu agua', 'distribuidora de agua');
+/*após validação, fornecedor é cadastrado na tabela Fornecedor*/
+INSERT INTO Fornecedor (cpf_cnpj, razaosocial, cnae) SELECT * FROM Pessoajuridica;
